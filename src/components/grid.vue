@@ -19,59 +19,13 @@
 </template>
 
 <script setup lang="ts">
+  import { toRefs } from 'vue';
+  import { storeToRefs } from 'pinia'
+  import { useStore } from '@/store/products.js'
+  import { fadeIn, fadeOut } from '@/components/composible/use-animation.js';
+  import productCart from '@/components/cart/cart.vue';
 
-import {reactive, toRefs, ref, onMounted} from 'vue';
-import { storeToRefs } from 'pinia'
-import { useStore } from '@/store/products.js'
-import { fadeIn, fadeOut } from '@/components/composible/use-animation.js';
-import productCart from '@/components/cart';
-
-const { products } = storeToRefs(useStore())
-/*
-export default {
-  name: 'Grid',
-
-  components: {
-    'product-cart': productCart
-  },
-
-  setup() {
-    const store = useStore();
-
-    const state = reactive({
-      isLoading: true,
-      error: ''
-    });
-
-    const msgInfo = ref(null);
-
-    onMounted(async () => {
-      await fadeIn(msgInfo.value, 250); // 2nd argument is delay befor animation start
-      msgInfo.value.classList.remove('transparent');
-
-      store.dispatch('fetchProducts').then(
-        async (res) => {
-          await fadeOut(msgInfo.value, 500); // 2nd argument is delay befor animation start
-          state.isLoading = false;
-        },
-        async (err) => {
-          await fadeOut(msgInfo.value, 500) // 2nd argument is delay befor animation start
-          state.error = err.toString().replace(/\"/,'')
-        }
-      )
-    })
-
-    return {
-      ...toRefs(state),
-      msgInfo,
-    }
-  },
-
-  computed: {
-    ...mapState(['products'])
-  }
-}
-*/
+  const { products } = storeToRefs(useStore())
 </script>
 
 <style lang="scss" scoped>

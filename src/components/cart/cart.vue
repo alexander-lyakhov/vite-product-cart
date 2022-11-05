@@ -1,7 +1,7 @@
 ﻿<template>
   <div class="cart">
     <div class="title">
-      {{cart.title}}
+      {{ cart.title }}
     </div>
 
     <div class="image">
@@ -10,14 +10,14 @@
     </div>
 
     <div class="price">
-      Price: {{cart.price}}$
+      Price: {{ cart.price }}$
     </div>
 
     <counter :value="amount" :max="cart.limit" @change="change" />
 
     <div class="price-total">
       <span>Total:</span>
-      <span>{{totalPrice}} $</span>
+      <span>{{ totalPrice }} $</span>
     </div>
 
     <div class="reset-wrapper" :class="{isActive: isResetActive}">
@@ -27,67 +27,40 @@
 </template>
 
 <script setup lang="ts">
+  import { useStore } from '@/store/products.js'
+  import { reactive, ref, toRefs, computed } from 'vue'
+  import counter from './counter-composition'
 
-import { useStore } from '@/store/products.js'
-import { reactive, ref, toRefs, computed } from 'vue'
-import counter from './counter-composition'
-
-const props = defineProps({
-  cart: {
-    type: Object,
-    default: () => {}
-  }
-})
-
-/*
-export default {
-  name: 'cart',
-
-  components: {
-    counter
-  },
-
-  props: {
+  const props = defineProps({
     cart: {
       type: Object,
       default: () => {}
     }
-  },
+  })
 
-  setup({cart}, context) {
-    const state = reactive({
-      amount: 0,
-    })
+  const store = useStore()
+  const amount = ref(0)
 
-    const store = useStore();
+  const totalPrice = computed(() =>
+    props.cart.price * amount.value
+  )
 
-    return {
-      ...toRefs(state),
+  const isResetActive = computed(() =>
+    amount.value > 0
+  )
 
-      totalPrice: computed(() =>
-        cart.price * state.amount
-      ),
+  const change = (value) => {
+    amount.value > value
+      ? store.decreaseTotalPrice(+props.cart.price)
+      : store.increaseTotalPrice(+props.cart.price)
 
-      isResetActive: computed(() =>
-        state.amount > 0
-      ),
+    amount.value = value
+  }
 
-      change(value) {
-        state.amount > value ?
-          store.commit('decreaseTotal', cart.price):
-          store.commit('increaseTotal', cart.price);
-
-        state.amount = value;
-      },
-
-      reset() {
-        store.commit('decreaseAmount', {amount: state.amount, price: cart.price})
-        state.amount = 0;
-      }
-    }
-  },
-}
-*/
+  const reset = () => {
+    store.decreaseAmount(amount.value, +props.cart.price)
+    amount.value = 0;
+  }
 </script>
 
 
