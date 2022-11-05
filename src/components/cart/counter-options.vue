@@ -8,7 +8,7 @@
 
 <script>
 
-import { wheel } from '@/utils/directives.js';
+import {mapState, mapGetters} from 'vuex'
 
 export default {
   name: 'counter',
@@ -30,44 +30,40 @@ export default {
     }
   },
 
-  emits: {
-    change: {
-      type: Number
+  directives: {
+    wheel: {
+      mounted: function(el, binding) {
+        el.addEventListener('wheel', binding.value.bind(this));
+        el.addEventListener('DOMMouseScroll', binding.value.bind(this));
+      }
     }
   },
 
-  setup(props, { emit }) {
-    const decrease = () => {
-      if (props.value > props.min) {
-        emit('change', props.value - 1)
+  methods: {
+    decrease() {
+      if (this.value > this.min) {
+        this.$emit('decrease');
       }
-    }
+    },
 
-    const increase = () => {
-      if (props.value < props.max || !props.max) {
-        emit('change', props.value + 1)
+    increase() {
+      if (this.value < this.max || !this.max) {
+        this.$emit('increase');
       }
-    }
+    },
 
-    const mouseWheelHandler = (e) => {
+    mouseWheelHandler: function(e) {
       e.preventDefault();
       e.stopPropagation();
 
       var direction = e.deltaY || e.detail || e.wheelDelta;
 
       Math.abs(direction) === 120 ?
-        direction > 0 ? increase():decrease():
-        direction < 0 ? increase():decrease();
-    }
+        direction > 0 ? this.increase():this.decrease():
+        direction < 0 ? this.increase():this.decrease();
+    },
+  }
 
-    return {
-      decrease,
-      increase,
-      mouseWheelHandler
-    }
-  },
-
-  directives: { wheel }
 }
 </script>
 

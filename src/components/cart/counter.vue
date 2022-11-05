@@ -1,19 +1,35 @@
 ﻿<template>
-  <div class="counter" :class="{selected: value > 0}">
-    <button class="decrease" @click.stop="decrease" />
-    <div class="value" :class="{maximum: value === max}" v-wheel="mouseWheelHandler">{{value}}</div>
-    <button class="increase" @click.stop="increase" />
+  <div
+    class="counter"
+    :class="{selected: isCounterSelected}"
+  >
+    <button
+      class="decrease"
+      @click.stop="decrease"
+    />
+
+    <div
+      class="value"
+      :class="{maximum: value === max}"
+      v-wheel="mouseWheelHandler"
+    >{{ value }}</div>
+
+    <button
+      class="increase"
+      @click.stop="increase"
+    />
   </div>
 </template>
 
-<script>
+<script setup type="ts">
+  import { computed } from 'vue'
+  import { wheel as vWheel } from '@/utils/directives.js';
+  import useMouseWheel from '@/components/composable/useMouseWheel.js'
 
-import {mapState, mapGetters} from 'vuex'
-
-export default {
-  name: 'counter',
-
-  props: {
+  //
+  // props declaration
+  //
+  const props = defineProps({
     min: {
       type: Number,
       default: 0
@@ -28,43 +44,38 @@ export default {
       type: Number,
       default: 0
     }
-  },
+  })
 
-  directives: {
-    wheel: {
-      mounted: function(el, binding) {
-        el.addEventListener('wheel', binding.value.bind(this));
-        el.addEventListener('DOMMouseScroll', binding.value.bind(this));
-      }
+  //
+  // emits declaration
+  //
+  const emit = defineEmits({
+    change: {
+      type: Number
     }
-  },
+  })
 
-  methods: {
-    decrease() {
-      if (this.value > this.min) {
-        this.$emit('decrease');
-      }
-    },
+  //
+  // computed
+  //
+  const isCounterSelected = computed(() => props.value > 0)
 
-    increase() {
-      if (this.value < this.max || !this.max) {
-        this.$emit('increase');
-      }
-    },
-
-    mouseWheelHandler: function(e) {
-      e.preventDefault();
-      e.stopPropagation();
-
-      var direction = e.deltaY || e.detail || e.wheelDelta;
-
-      Math.abs(direction) === 120 ?
-        direction > 0 ? this.increase():this.decrease():
-        direction < 0 ? this.increase():this.decrease();
-    },
+  //
+  // methods
+  //
+  const decrease = () => {
+    if (props.value > props.min) {
+      emit('change', props.value - 1)
+    }
   }
 
-}
+  const increase = () => {
+    if (props.value < props.max || !props.max) {
+      emit('change', props.value + 1)
+    }
+  }
+
+  const mouseWheelHandler = useMouseWheel(increase, decrease)
 </script>
 
 <style lang="scss" scoped>

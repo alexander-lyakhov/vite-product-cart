@@ -29,7 +29,7 @@
 <script setup lang="ts">
   import { useStore } from '@/store/products.js'
   import { reactive, ref, toRefs, computed } from 'vue'
-  import counter from './counter-composition'
+  import counter from './counter'
 
   const props = defineProps({
     cart: {
@@ -41,6 +41,9 @@
   const store = useStore()
   const amount = ref(0)
 
+  //
+  // computed
+  //
   const totalPrice = computed(() =>
     props.cart.price * amount.value
   )
@@ -49,6 +52,9 @@
     amount.value > 0
   )
 
+  //
+  // methods
+  //
   const change = (value) => {
     amount.value > value
       ? store.decreaseTotalPrice(+props.cart.price)

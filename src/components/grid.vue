@@ -19,7 +19,6 @@
 </template>
 
 <script setup lang="ts">
-  import { toRefs } from 'vue';
   import { storeToRefs } from 'pinia'
   import { useStore } from '@/store/products.js'
   import { fadeIn, fadeOut } from '@/components/composible/use-animation.js';
