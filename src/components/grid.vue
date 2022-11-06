@@ -21,7 +21,7 @@
 <script setup lang="ts">
   import { storeToRefs } from 'pinia'
   import { useStore } from '@/store/products.js'
-  import { fadeIn, fadeOut } from '@/components/composible/use-animation.js';
+  // import { fadeIn, fadeOut } from '@/components/composible/use-animation.js';
   import productCart from '@/components/cart/cart.vue';
 
   const { products } = storeToRefs(useStore())

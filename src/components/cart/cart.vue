@@ -13,7 +13,11 @@
       Price: {{ cart.price }}$
     </div>
 
-    <counter v-model:amount="amount" :max="cart.limit" />
+    <counter
+      :amount="amount"
+      :max="cart.limit"
+      @update:amount="change"
+    />
 
     <div class="price-total">
       <span>Total:</span>
@@ -57,26 +61,21 @@
   )
 
   //
-  // watchers
-  //
-  watch(amount, (val, oldVal) => {
-    if (Math.abs(oldVal - val) > 1) {
-      return
-    }
-    oldVal > val
-      ? store.decreaseTotalPrice(+props.cart.price)
-      : store.increaseTotalPrice(+props.cart.price)
-  })
-
-  //
   // methods
   //
+  const change = (value) => {
+    amount.value > value
+      ? store.decreaseTotalPrice(+props.cart.price)
+      : store.increaseTotalPrice(+props.cart.price)
+
+    amount.value = value
+  }
+
   const reset = () => {
     store.decreaseAmount(amount.value, +props.cart.price)
     amount.value = 0;
   }
 </script>
-
 
 <style lang="scss" scoped>
 
