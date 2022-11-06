@@ -13,7 +13,7 @@
       Price: {{ cart.price }}$
     </div>
 
-    <counter :value="amount" :max="cart.limit" @change="change" />
+    <counter v-model:amount="amount" :max="cart.limit" />
 
     <div class="price-total">
       <span>Total:</span>
@@ -21,14 +21,18 @@
     </div>
 
     <div class="reset-wrapper" :class="{isActive: isResetActive}">
-      <button class="reset" @click.stop="reset" :disabled="!isResetActive">Reset</button>
+      <button
+        class="reset"
+        :disabled="!isResetActive"
+        @click.stop="reset"
+      >Reset</button>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
   import { useStore } from '@/store/products.js'
-  import { reactive, ref, toRefs, computed } from 'vue'
+  import { ref, computed, watch } from 'vue'
   import counter from './counter'
 
   const props = defineProps({
@@ -53,16 +57,20 @@
   )
 
   //
-  // methods
+  // watchers
   //
-  const change = (value) => {
-    amount.value > value
+  watch(amount, (val, oldVal) => {
+    if (Math.abs(oldVal - val) > 1) {
+      return
+    }
+    oldVal > val
       ? store.decreaseTotalPrice(+props.cart.price)
       : store.increaseTotalPrice(+props.cart.price)
+  })
 
-    amount.value = value
-  }
-
+  //
+  // methods
+  //
   const reset = () => {
     store.decreaseAmount(amount.value, +props.cart.price)
     amount.value = 0;

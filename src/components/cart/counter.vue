@@ -10,9 +10,9 @@
 
     <div
       class="value"
-      :class="{maximum: value === max}"
+      :class="{maximum: amount === max}"
       v-wheel="mouseWheelHandler"
-    >{{ value }}</div>
+    >{{ amount }}</div>
 
     <button
       class="increase"
@@ -40,7 +40,7 @@
       default: 0
     },
 
-    value: {
+    amount: {
       type: Number,
       default: 0
     }
@@ -50,7 +50,7 @@
   // emits declaration
   //
   const emit = defineEmits({
-    change: {
+    "update:amount": {
       type: Number
     }
   })
@@ -58,20 +58,20 @@
   //
   // computed
   //
-  const isCounterSelected = computed(() => props.value > 0)
+  const isCounterSelected = computed(() => props.amount > 0)
 
   //
   // methods
   //
   const decrease = () => {
-    if (props.value > props.min) {
-      emit('change', props.value - 1)
+    if (props.amount > props.min) {
+      emit('update:amount', props.amount - 1)
     }
   }
 
   const increase = () => {
-    if (props.value < props.max || !props.max) {
-      emit('change', props.value + 1)
+    if (props.amount < props.max || !props.max) {
+      emit('update:amount', props.amount + 1)
     }
   }
 
