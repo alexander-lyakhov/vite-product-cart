@@ -19,12 +19,20 @@
 </template>
 
 <script setup lang="ts">
+  import { onMounted } from 'vue'
   import { storeToRefs } from 'pinia'
   import { useStore } from '@/store/products.js'
   // import { fadeIn, fadeOut } from '@/components/composible/use-animation.js';
   import productCart from '@/components/cart/cart.vue';
 
-  const { products } = storeToRefs(useStore())
+  const store = useStore()
+  const { products } = storeToRefs(store)
+
+  onMounted(() => {
+    store.fetchData().catch(
+      err => console.log('-- ERROR --', err)
+    )
+  })
 </script>
 
 <style lang="scss" scoped>

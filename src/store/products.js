@@ -3,7 +3,7 @@ import data from './data.json';
 
 export const useStore = defineStore('products', {
   state: () => ({
-    products: data,
+    products: [],
     totalProducts: 0,
     totalPrice: 0
   }),
@@ -28,5 +28,15 @@ export const useStore = defineStore('products', {
       this.totalProducts += amount;
       this.totalPrice += amount * price;
     },
+
+    async fetchData() {
+      const res = await fetch('http://my-json-server.typicode.com/alexander-lyakhov/vue3-product-cart/products')
+      
+      if (!res.ok) {
+        throw new Error(res.statusText)
+      }
+      
+      this.products = await res.json()
+    }
   }
 })
