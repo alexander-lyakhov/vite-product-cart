@@ -21,7 +21,7 @@
   </div>
 </template>
 
-<script setup type="ts">
+<script setup lang="ts">
   import { computed } from 'vue'
   import { wheel as vWheel } from '@/utils/directives.js';
   import useMouseWheel from '@/components/composable/useMouseWheel.js'

@@ -13,7 +13,7 @@
 
   <template v-else>
     <div class="message msg-error fade-in">
-      {{error}}
+      {{ error }}
     </div>
   </template>
 </template>
@@ -30,7 +30,7 @@
 
   onMounted(() => {
     store.fetchData().catch(
-      err => console.log('-- ERROR --', err)
+      (err:PromiseRejectionEvent) => console.log('-- ERROR --', err)
     )
   })
 </script>

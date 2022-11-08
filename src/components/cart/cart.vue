@@ -37,7 +37,7 @@
 <script setup lang="ts">
   import { useStore } from '@/store/products.js'
   import { ref, computed, watch } from 'vue'
-  import counter from './counter'
+  import counter from './counter.vue'
 
   const props = defineProps({
     cart: {
@@ -63,7 +63,7 @@
   //
   // methods
   //
-  const change = (value) => {
+  const change = (value:number) => {
     amount.value > value
       ? store.decreaseTotalPrice(+props.cart.price)
       : store.increaseTotalPrice(+props.cart.price)
