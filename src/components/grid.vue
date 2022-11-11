@@ -1,21 +1,9 @@
 ﻿<template>
-  <template v-if="!error">
-    <div v-if="isLoading" class="message msg-info transparent" ref="msgInfo">
-      Fetching data...
+  <div class="grid">
+    <div class="grid-cell" v-for="(cart, index) in products" :key="index">
+      <product-cart :cart="cart" />
     </div>
-
-    <div v-else class="grid">
-      <div class="grid-cell" v-for="(cart, index) in products" :key="index">
-        <product-cart :cart="cart" />
-      </div>
-    </div>
-  </template>
-
-  <template v-else>
-    <div class="message msg-error fade-in">
-      {{ error }}
-    </div>
-  </template>
+  </div>
 </template>
 
 <script setup lang="ts">
